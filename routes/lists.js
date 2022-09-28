@@ -17,7 +17,12 @@ router.get('/:id', function (req, res, next) {
 
 /* POST a new list */
 router.post('/', function (req, res, next) {
-    res.send(`This will create a list`);
+    const list = new ListModel({name: `test`});
+    list.save( (err) => {
+        if (err) return handleError(err);
+    });
+    res.send(`Hello`);
+    // res.send(`This will create a list`);
 });
 
 /* DELETE a List based on an id */
