@@ -1,10 +1,15 @@
 const express = require('express');
 const router = express.Router();
+const Element = require('../models/element');
 
 /* GET Elements listing based on a list id. */
 router.get('/:listId', function(req, res, next) {
     const listId = req.params.listId;
-    res.send(`This will be all the Elements of the List ${listId}`);
+    Element.find({list: listId}, (err, elements) => {
+        if (err) return handleError(err);
+        res.status(200).send(elements);
+    });
+    // res.send(`This will be all the Elements of the List ${listId}`);
 });
 
 /* GET a single element based on id. */
@@ -14,9 +19,13 @@ router.get('/:id', function(req, res, next) {
 });
 
 /* POST an element based on a list id*/
-router.post('/:listId', function(req, res, next) {
-    const listId = req.params.listId;
-    res.status(201).send(`This will create an element and attach it to the list ${listId} if it exists`);
+router.post('/', function(req, res, next) {
+    console.log(req.body);
+    const element = new Element(req.body);
+    element.save( (err) => {
+        if (err) return handleError(err);
+    });
+    res.status(201).send(`Created`);
 });
 
 /* DELETE an element based on an id */

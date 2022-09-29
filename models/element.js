@@ -1,7 +1,6 @@
 const {Schema, model} = require('mongoose');
 
 const ElementSchema = new Schema({
-    id: String,
     name: String,
     list: {
         type: Schema.Types.ObjectId,
@@ -9,4 +8,4 @@ const ElementSchema = new Schema({
     }
 });
 
-module.exports = model("ElementModel", ElementSchema);
+module.exports = model("Element", ElementSchema);

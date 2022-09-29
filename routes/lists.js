@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const ListModel = require('../models/list');
+const List = require('../models/list');
 
 /* GET lists listing. */
 router.get('/', async function(req, res, next) {
-    const lists = await ListModel.find();
+    const lists = await List.find();
     res.status(200).send(lists);
     // res.send(`This will be all the Lists`);
 });
@@ -17,7 +17,7 @@ router.get('/:id', function (req, res, next) {
 
 /* POST a new list */
 router.post('/', function (req, res, next) {
-    const list = new ListModel({name: `test`});
+    const list = new List(req.body);
     list.save( (err) => {
         if (err) return handleError(err);
     });
@@ -28,7 +28,10 @@ router.post('/', function (req, res, next) {
 /* DELETE a List based on an id */
 router.delete('/:id', function (req, res, next) {
     const id = req.params.id;
-    res.send(`This will delete the list ${id}`);
+    List.deleteOne({"_id": id}, function (err) {
+        if(err) res.status(500).send({"message": err});
+        res.status(200).send({"message": "Successful deletion"});
+    });
 });
 
 /* UPDATE a list based on id with the given parameters */
